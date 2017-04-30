@@ -3,6 +3,8 @@
 import rospy
 from std_msgs.msg import String
 from std_msgs.msg import Int8MultiArray
+from std_msgs.msg import UInt16
+
 
 #from std_msgs.msg import Int8MultiArray
 from sensor_msgs.msg import Image
@@ -66,6 +68,25 @@ def game_logic():
         if full_columns[selected_column]==0:
             break
 
+    rospy.loginfo('roboy is playing in column %r', selected_column+1)
+
+    #------------- Roboy Moves Arm to Column -------------------------
+    pub3=rospy.Publisher('/servo',UInt16,  queue_size=10)
+    pub4=rospy.Publisher('/servo2',UInt16, queue_size=10)
+
+    # values between 30 and 150
+    # 30 50 70 90 110 130 150
+
+    arm_position = UInt16()
+    arm_position.data = 30+20*selected_column
+    pub3.publish(arm_position)
+
+    open_hand = UInt16()
+    open_hand.data= 50
+    pub4.publish(open_hand)
+    # -------------- End of Movement ---------------------------
+
+
     for i in range(6):
         if game_state.data[(5-i)*7+selected_column] == 0:
             game_state.data[(5-i)*7+selected_column]=2 # roboy plays
@@ -107,6 +128,7 @@ def update_game_state(data_input):
     if msg_list[0]==1 and player_turn==msg_list[1]: #from talk and correct turn
         player_turn = 1-player_turn
         column = msg_list[3]
+        rospy.loginfo('the human is playing in column %r', msg_list[3]+1)
         for i in range(6):
             if game_state.data[(5-i)*7+column] == 0:
                 game_state.data[(5-i)*7+column]=msg_list[1]
