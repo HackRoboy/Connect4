@@ -1,3 +1,3 @@
-# tictactoe
+# connect4
 
-This project aims at letting the user play tic-tac-toe agains Roboy in Virtual Reality. 
+This project aims at letting the user play connect4 agains Roboy.
