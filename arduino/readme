@@ -1,0 +1,12 @@
+The arduino code utilized here uses two ros packages:
+ros-kinetic-rosserial
+ros-kinetic-rosserial-arduino
+
+After flashing the arduino code and starting the roscore, enter 
+$ rosrun rosserial_python serial_node.py /dev/ttyACM0
+to connect ros to the arduino board. /dev/ttyACM0 may vary, check the name of the serial port
+in the Arduino IDE under which the board connects.
+
+Connectivity to the board can be testet via:
+$ rostopic pub servo2 std_msgs/UInt16 150  --once
+which will set servo2 to position 150.
